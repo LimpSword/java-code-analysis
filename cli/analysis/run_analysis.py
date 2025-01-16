@@ -40,6 +40,10 @@ def analyze(folder: str):
     subprocess.run(command, shell=True, stdout=subprocess.PIPE)
     print(f"Analysis report saved to {sanitized_folder}.html")
 
+    html_file = f"{sanitized_folder}.html"
+    dest = os.path.join(folder, html_file)
+    subprocess.run(f"cp {html_file} {dest}", shell=True, stdout=subprocess.PIPE)
+
     print("Analyzing code base with an LLM assistant...")
     analyze_code_base(folder, save_file=True)
     print("Analysis report saved to output folder.")

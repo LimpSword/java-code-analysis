@@ -5,8 +5,8 @@ from typing import List
 @dataclass
 class ImprovementPoint:
     problem: str
+    example_in_project: str
     solution: str
-    example: str
     why: str
 
 
@@ -25,14 +25,17 @@ class SoftwareArchitecture:
     ----
 
     Analyze this code base and carefully write every semantic mistake you find in the code. The code should be as clear
-    and as maintainable as possible and should follow the best practices of software architecture. However, no need to
-    be too strict, as the students are still learning.
+    and as maintainable as possible and should follow the best practices of software architecture. Rules should not be
+    too strict, as the students are still learning. Give as many improvement points as relevant.
+    At the root, you have a PMD report that you can use to help you analyze the code base. Keep any comments about it
+    in the PMD Static Analysis Summary section.
     """
 
     name: str
     description: str
     improvement_points: List[ImprovementPoint]
     good_practices: List[GoodPractice]
+    pmd_static_analysis_summary: str
     summary: str
 
     def to_markdown(self) -> str:
@@ -43,14 +46,16 @@ class SoftwareArchitecture:
         for i, point in enumerate(self.improvement_points):
             lines.append(f"## Improvement Point {i + 1}\n")
             lines.append(f"\n**Problem**: {point.problem}\n")
+            lines.append(f"\n**Example**: {point.example_in_project}\n")
             lines.append(f"\n**Solution**: {point.solution}\n")
-            lines.append(f"\n**Example**: {point.example}\n")
             lines.append(f"\n**Why**: {point.why}\n")
         lines.append("\n")
         lines.append("## Good Practices\n")
         for i, practice in enumerate(self.good_practices):
             lines.append(f"**{i + 1}.** {practice.description}\n\n")
         lines.append("\n")
+        lines.append("## PMD Static Analysis Summary\n")
+        lines.append(f"{self.pmd_static_analysis_summary}\n")
         lines.append("## Summary\n")
         lines.append(f"{self.summary}\n")
         return "".join(lines)
