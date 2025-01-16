@@ -1,5 +1,6 @@
 import os
 import subprocess
+from typing import Annotated
 
 import typer
 
@@ -13,7 +14,8 @@ rules_file = "java-rules.xml"
 
 
 @app.command()
-def analyze(folder: str):
+def analyze(folder: Annotated[str, typer.Argument()], llm: Annotated[
+    bool, typer.Option("--llm/--no-llm", help="Analyze the code base with the LLM assistant")] = False):
     """
     Analyze the given project folder.
     """
@@ -40,13 +42,14 @@ def analyze(folder: str):
     subprocess.run(command, shell=True, stdout=subprocess.PIPE)
     print(f"Analysis report saved to {sanitized_folder}.html")
 
-    html_file = f"{sanitized_folder}.html"
-    dest = os.path.join(folder, html_file)
-    subprocess.run(f"cp {html_file} {dest}", shell=True, stdout=subprocess.PIPE)
+    if llm:
+        html_file = f"{sanitized_folder}.html"
+        dest = os.path.join(folder, html_file)
+        subprocess.run(f"cp {html_file} {dest}", shell=True, stdout=subprocess.PIPE)
 
-    print("Analyzing code base with an LLM assistant...")
-    analyze_code_base(folder, save_file=True)
-    print("Analysis report saved to output folder.")
+        print("Analyzing code base with an LLM assistant...")
+        analyze_code_base(folder, save_file=True)
+        print("Analysis report saved to output folder.")
 
 
 @app.command()
