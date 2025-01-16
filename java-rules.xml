@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ruleset name="All Java Rules"
+    xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.io/ruleset_2_0_0.xsd">
+    <description>Basic rules for Java</description>
+
+    <!-- Lexer test cases - wrong encoding, illegal characters, ... -->
+    <exclude-pattern>.*/ant/java/EncodingTestClass.java</exclude-pattern>
+    <exclude-pattern>.*/net/sourceforge/pmd/cpd/badandgood/BadFile.java</exclude-pattern>
+
+    <!-- the following files produce parsing errors with java 9, as they use identifiers, that
+         are now reserved keywords and are forbidden to be used as identifiers.
+    -->
+    <exclude-pattern>.*/net/sourceforge/pmd/lang/java/ast/jdkversiontests/assert_test5.java</exclude-pattern>
+    <exclude-pattern>.*/net/sourceforge/pmd/lang/java/ast/jdkversiontests/assert_test5_a.java</exclude-pattern>
+    <exclude-pattern>.*/net/sourceforge/pmd/lang/java/ast/jdkversiontests/assert_test7.java</exclude-pattern>
+    <exclude-pattern>.*/net/sourceforge/pmd/lang/java/ast/jdkversiontests/jdk14_enum.java</exclude-pattern>
+    <exclude-pattern>.*/net/sourceforge/pmd/lang/java/ast/jdkversiontests/jdk9_invalid_identifier.java</exclude-pattern>
+    <exclude-pattern>.*/net/sourceforge/pmd/lang/java/ast/jdkversiontests/java10/LocalVariableTypeInference_varAsAnnotationName.java</exclude-pattern>
+    <exclude-pattern>.*/net/sourceforge/pmd/lang/java/ast/jdkversiontests/java10/LocalVariableTypeInference_varAsEnumName.java</exclude-pattern>
+    <exclude-pattern>.*/net/sourceforge/pmd/lang/java/ast/jdkversiontests/java10/LocalVariableTypeInference_varAsTypeIdentifier.java</exclude-pattern>
+
+    <!-- this file contains are parse error explicitly -->
+    <exclude-pattern>.*/net/sourceforge/pmd/lang/java/ast/InfiniteLoopInLookahead.java</exclude-pattern>
+
+    <rule ref="category/java/bestpractices.xml/AvoidReassigningCatchVariables" />
+    <rule ref="category/java/bestpractices.xml/AvoidReassigningLoopVariables" />
+    <rule ref="category/java/bestpractices.xml/AvoidReassigningParameters" />
+    <rule ref="category/java/bestpractices.xml/LooseCoupling" />
+    <rule ref="category/java/bestpractices.xml/NonExhaustiveSwitch" />
+    <rule ref="category/java/bestpractices.xml/OneDeclarationPerLine" />
+    <rule ref="category/java/bestpractices.xml/UnusedFormalParameter" />
+    <rule ref="category/java/codestyle.xml/AvoidProtectedFieldInFinalClass" />
+    <rule ref="category/java/codestyle.xml/ControlStatementBraces" />
+    <rule ref="category/java/codestyle.xml/ExtendsObject" />
+    <rule ref="category/java/codestyle.xml/FieldDeclarationsShouldBeAtStartOfClass" />
+    <rule ref="category/java/codestyle.xml/NoPackage" />
+    <rule ref="category/java/codestyle.xml/PackageCase" />
+    <rule ref="category/java/codestyle.xml/TooManyStaticImports" />
+    <rule ref="category/java/codestyle.xml/UselessParentheses" />
+    <rule ref="category/java/design.xml/AvoidDeeplyNestedIfStmts" />
+    <rule ref="category/java/design.xml/AvoidRethrowingException" />
+    <rule ref="category/java/design.xml/CognitiveComplexity" />
+    <rule ref="category/java/design.xml/CouplingBetweenObjects" />
+    <rule ref="category/java/design.xml/FinalFieldCouldBeStatic" />
+    <rule ref="category/java/design.xml/GodClass" />
+    <!--<rule ref="category/java/design.xml/LawOfDemeter" />-->
+    <rule ref="category/java/design.xml/NcssCount" />
+    <rule ref="category/java/errorprone.xml/AvoidDuplicateLiterals" />
+    <rule ref="category/java/errorprone.xml/NullAssignment" />
+    <rule ref="category/java/errorprone.xml/UnnecessaryCaseChange" />
+</ruleset>
