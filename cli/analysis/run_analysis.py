@@ -5,6 +5,8 @@ import typer
 
 from cli.pmd import require_pmd
 
+from cli.llm.llm_analysis import analyze_code_base
+
 app = typer.Typer()
 
 rules_file = "java-rules.xml"
@@ -37,6 +39,10 @@ def analyze(folder: str):
     command = f"pmd check --no-cache -d {right_path} -R {rules_file} -f html -r {sanitized_folder}.html"
     subprocess.run(command, shell=True, stdout=subprocess.PIPE)
     print(f"Analysis report saved to {sanitized_folder}.html")
+
+    print("Analyzing code base with an LLM assistant...")
+    analyze_code_base(folder, save_file=True)
+    print("Analysis report saved to output folder.")
 
 
 @app.command()
