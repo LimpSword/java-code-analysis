@@ -51,4 +51,11 @@
     <rule ref="category/java/errorprone.xml/AvoidDuplicateLiterals" />
     <rule ref="category/java/errorprone.xml/NullAssignment" />
     <rule ref="category/java/errorprone.xml/UnnecessaryCaseChange" />
+
+    <!-- Naming conventions -->
+    <rule ref="category/java/codestyle.xml/ClassNamingConventions" />
+    <rule ref="category/java/codestyle.xml/FieldNamingConventions" />
+    <rule ref="category/java/codestyle.xml/FormalParameterNamingConventions" />
+    <rule ref="category/java/codestyle.xml/LocalVariableNamingConventions" />
+
 </ruleset>
