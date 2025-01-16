@@ -3,10 +3,11 @@ import subprocess
 from typing import Annotated
 
 import typer
+from rich.progress import Progress, SpinnerColumn, TextColumn
 
 from cli.pmd import require_pmd
 
-from cli.llm.llm_analysis import analyze_code_base
+from cli.llm.llm_analysis import analyze_code_base, summarize_projects
 
 app = typer.Typer()
 
@@ -39,7 +40,12 @@ def analyze(folder: Annotated[str, typer.Argument()], llm: Annotated[
     print(f"Analyzing folder: {folder}")
     sanitized_folder = folder.replace('/', '.')
     command = f"pmd check --no-cache -d {right_path} -R {rules_file} -f html -r {sanitized_folder}.html"
-    subprocess.run(command, shell=True, stdout=subprocess.PIPE)
+
+    with Progress(SpinnerColumn(), TextColumn("[progress.description]{task.description}")) as progress:
+        task = progress.add_task("Analyzing code base...", total=1)
+        subprocess.run(command, shell=True, stdout=subprocess.PIPE)
+        progress.update(task, completed=1)
+
     print(f"Analysis report saved to {sanitized_folder}.html")
 
     if llm:
@@ -47,9 +53,11 @@ def analyze(folder: Annotated[str, typer.Argument()], llm: Annotated[
         dest = os.path.join(folder, html_file)
         subprocess.run(f"cp {html_file} {dest}", shell=True, stdout=subprocess.PIPE)
 
-        print("Analyzing code base with an LLM assistant...")
-        analyze_code_base(folder, save_file=True)
-        print("Analysis report saved to output folder.")
+        with Progress(SpinnerColumn(), TextColumn("[progress.description]{task.description}")) as progress:
+            task = progress.add_task("Analyzing code base with an LLM assistant...", total=1)
+            analyze_code_base(folder, save_file=True)
+            progress.update(task, completed=1)
+            print("Analysis report saved to output folder.")
 
 
 @app.command()
@@ -69,3 +77,10 @@ def analyze_all(folder: str):
             analyze(project_folder)
 
     print("All projects analyzed.")
+
+    with Progress(SpinnerColumn(), TextColumn("[progress.description]{task.description}")) as progress:
+        task = progress.add_task("Summarizing projects...", total=1)
+        summarize_projects()
+        progress.update(task, completed=1)
+
+    print("Summary saved to output folder.")
