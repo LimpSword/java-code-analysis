@@ -59,3 +59,10 @@ def analyze_all(folder: str):
         raise typer.Exit()
 
     print(f"Analyzing all projects in folder: {folder}")
+
+    for project in os.listdir(folder):
+        project_folder = os.path.join(folder, project)
+        if os.path.isdir(project_folder):
+            analyze(project_folder)
+
+    print("All projects analyzed.")
