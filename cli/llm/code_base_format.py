@@ -36,7 +36,7 @@ class SoftwareArchitecture:
     improvement_points: List[ImprovementPoint]
     good_practices: List[GoodPractice]
     pmd_static_analysis_summary: str
-    summary: str
+    final_summary: str
 
     def to_markdown(self) -> str:
         lines = [
@@ -57,5 +57,5 @@ class SoftwareArchitecture:
         lines.append("## PMD Static Analysis Summary\n")
         lines.append(f"{self.pmd_static_analysis_summary}\n")
         lines.append("## Summary\n")
-        lines.append(f"{self.summary}\n")
+        lines.append(f"{self.final_summary}\n")
         return "".join(lines)
