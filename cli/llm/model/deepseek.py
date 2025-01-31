@@ -3,11 +3,12 @@ from dataclasses import dataclass
 from typing import Callable
 
 from llm_core.assistants.base import BaseAssistant
-from llm_core.llm.base import LLMBase
 from llm_core.parsers import BaseParser
 from openai import OpenAI
 
 from decouple import config
+
+from cli.llm.base.base_v2 import LLMBase
 
 
 def load_openai_client(llm, **kwargs):

@@ -16,7 +16,8 @@ rules_file = "java-rules.xml"
 
 @app.command()
 def analyze(folder: Annotated[str, typer.Argument()], llm: Annotated[
-    bool, typer.Option("--llm/--no-llm", help="Analyze the code base with the LLM assistant")] = False):
+    bool, typer.Option("--llm/--no-llm", help="Analyze the code base with the LLM assistant")] = False,
+            model: Annotated[str, typer.Argument()] = None):
     """
     Analyze the given project folder.
     """
@@ -55,7 +56,7 @@ def analyze(folder: Annotated[str, typer.Argument()], llm: Annotated[
 
         with Progress(SpinnerColumn(), TextColumn("[progress.description]{task.description}")) as progress:
             task = progress.add_task("Analyzing code base with an LLM assistant...", total=1)
-            analyze_code_base(folder, save_file=True)
+            analyze_code_base(folder, save_file=True, model=model)
             progress.update(task, completed=1)
             print("Analysis report saved to output folder.")
 
