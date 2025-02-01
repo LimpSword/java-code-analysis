@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
-import json
 import codecs
+import json
 import traceback
-import dirtyjson
-
-from typing import Callable, List
 from dataclasses import dataclass, fields
 from datetime import datetime, timezone
+from typing import Callable, List
 
-from ..schema import (
+import dirtyjson
+from llm_core.schema import (
     as_tool,
     from_dict,
     make_selection_tool,
@@ -70,7 +69,38 @@ class LLMBase:
             raw_tool_results=False,
             image_b64=None,
     ):
-        self.sanitize_prompt(prompt=prompt, history=history, schema=schema)
+        # self.sanitize_prompt(prompt=prompt, history=history, schema=schema)
+        prompts = self.divide_prompt(prompt, schema)
+
+        if len(prompts) > 1:
+            final = ""
+            for i, subprompt in enumerate(prompts):
+                completion = self.ask(
+                    subprompt,
+                    history=history,
+                    schema=schema,
+                    temperature=temperature,
+                    tools=tools,
+                    raw_tool_results=raw_tool_results,
+                    image_b64=image_b64
+                )
+
+                final += completion.choices[0].message.content
+
+            # Ask the LLM to aggregate the results and return the final result
+            prompt = "The code base being too large, you have received those reports from the other reviewers. You are in charge of summarizing the reports and giving a general feedback on the software architecture of the projects."
+            messages = [
+                {"role": "system", "content": self.system_prompt},
+                {"role": "user", "content": prompt},
+                {"role": "user", "content": final},
+            ]
+
+            return self._generate_completion(
+                model=self.name,
+                messages=messages,
+                temperature=temperature,
+                schema=schema,
+            )
 
         current_datetime = datetime.now(timezone.utc).isoformat()
         messages = [
@@ -244,14 +274,10 @@ class LLMBase:
         needed_size = self.get_size_without_prompt(schema=schema)
 
         for i in range(0, prompt_len, self.ctx_size):
-            subprompt = codecs.decode(encoded_prompt[i:i+self.ctx_size-needed_size], "tiktoken")
+            subprompt = codecs.decode(encoded_prompt[i:i + self.ctx_size - needed_size], "tiktoken")
             subprompts.append(subprompt)
 
         return subprompts
-
-    def aggregate_results(self, results):
-        # Ask the LLAMA to aggregate the results and return the final result
-        pass
 
     def sanitize_prompt(
             self,

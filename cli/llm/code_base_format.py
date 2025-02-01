@@ -26,7 +26,8 @@ class SoftwareArchitecture:
 
     Analyze this code base and carefully write every semantic mistake you find in the code. The code should be as clear
     and as maintainable as possible and should follow the best practices of software architecture. Rules should not be
-    too strict, as the students are still learning. Give as many improvement points as relevant.
+    too strict, as the students are still learning. Give as many improvement points as relevant. Note that the code you
+    review may be part of a larger project, so you should consider as much as you can about the context of the code.
     At the root, you have a PMD report that you can use to help you analyze the code base. Keep any comments about it
     in the PMD Static Analysis Summary section.
     """
